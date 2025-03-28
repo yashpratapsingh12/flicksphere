@@ -1,8 +1,21 @@
+import hero from "./assets/hero.png";
+
 function App() {
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </>
+    <main>
+      <div>
+        <header className="mt-10">
+          <img src={hero} className="mx-auto" />
+          <h1 className=" mx-auto text-white font-semibold text-5xl text-center">
+            Find
+            <span className=" mx-2 bg-linear-to-r from-blue-300 to-purple-400 bg-clip-text text-transparent">
+              Movies
+            </span>
+            You'll Enjoy Without the hassle
+          </h1>
+        </header>
+      </div>
+    </main>
   );
 }
 
