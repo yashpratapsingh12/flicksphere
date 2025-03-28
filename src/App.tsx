@@ -1,6 +1,9 @@
+import { useState } from "react";
 import hero from "./assets/hero.png";
+import Search from "./Components/Search";
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState<string>("");
   return (
     <main>
       <div>
@@ -14,6 +17,7 @@ function App() {
             You'll Enjoy Without the hassle
           </h1>
         </header>
+        <Search />
       </div>
     </main>
   );
