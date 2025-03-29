@@ -17,7 +17,7 @@ function App() {
             You'll Enjoy Without the hassle
           </h1>
         </header>
-        <Search />
+        <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       </div>
     </main>
   );
