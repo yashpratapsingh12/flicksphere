@@ -1,9 +1,29 @@
 import { useState } from "react";
 import hero from "./assets/hero.png";
 import Search from "./Components/Search";
+import { FetchData } from "./utils/FetchData";
+import { useEffect } from "react";
+
+const API_BASE_URL: string = "https://api.themoviedb.org/3";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  useEffect(() => {
+    const fetchMovieData = async () => {
+      try {
+        const data = FetchData(
+          `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`
+        );
+        console.log(data);
+      } catch (error) {
+        console.error(`Error fetching movies :${error}`);
+        setErrorMessage("Error Fetching Movies .Please Try Again");
+      }
+    };
+    fetchMovieData();
+  }, []);
   return (
     <main>
       <div>
