@@ -11,7 +11,7 @@ const Search: React.FC<searchProps> = ({ searchTerm, setSearchTerm }) => {
       <div className="flex gap-2">
         <img src={searchIcon} alt="search" />
         <input
-          placeholder="Search For Movies"
+          placeholder="Search For Movie"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className=" outline-hidden"
