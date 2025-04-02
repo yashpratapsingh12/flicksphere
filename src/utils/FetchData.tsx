@@ -11,6 +11,7 @@ export const FetchData = async (url: string) => {
   try {
     const response = await fetch(url, MovieData);
     const data = await response.json();
+
     return data;
   } catch (error) {
     console.error(`Erro Fetching ${error}`);
