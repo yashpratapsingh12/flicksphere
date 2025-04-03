@@ -48,12 +48,12 @@ function App() {
     };
     fetchMovieData();
   }, []);
-  // useEffect(() => {
-  //   console.log(movieList); // ✅ Logs the updated movieList whenever it changes
-  // }, [movieList]);
+  useEffect(() => {
+    console.log(movieList); // ✅ Logs the updated movieList whenever it changes
+  }, [movieList]);
   return (
     <main>
-      <div>
+      <div className="">
         <header className="mt-10">
           <img src={hero} className="mx-auto" />
           <h1 className=" mx-auto text-white font-semibold text-5xl text-center">
@@ -65,8 +65,8 @@ function App() {
           </h1>
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
-        <section className="">
-          <h2 className="text-white text-center font-bold text-3xl mt-[40px]">
+        <section className="space-y-9">
+          <h2 className="text-white  font-bold text-3xl mt-[40px]">
             All Movies
           </h2>
 
@@ -75,7 +75,7 @@ function App() {
           ) : errorMessage ? (
             <p className="text-red-500">{errorMessage}</p>
           ) : (
-            <ul>
+            <ul className="grid grid-col-1 gap-2 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
               {movieList.map((movie) => (
                 <MovieCard key={movie.id} movie={movie} />
               ))}
