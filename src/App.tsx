@@ -5,6 +5,7 @@ import { FetchData } from "./utils/FetchData";
 import { useEffect } from "react";
 import Spinner from "./Components/Spinner";
 import MovieCard from "./Components/MovieCard";
+import { useDebounce } from "react-use";
 
 const API_BASE_URL: string = "https://api.themoviedb.org/3";
 
@@ -30,13 +31,25 @@ function App() {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [movieList, setMovieList] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [debounceSearchTerm, setDebounceSearchTerm] = useState<string>("");
+
+  useDebounce(
+    () => {
+      setDebounceSearchTerm(searchTerm);
+    },
+    500,
+    [searchTerm]
+  );
 
   useEffect(() => {
     const fetchMovieData = async () => {
       try {
-        const response = await FetchData(
-          `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`
-        );
+        const endpoint = debounceSearchTerm
+          ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(
+              debounceSearchTerm
+            )}`
+          : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+        const response = await FetchData(endpoint);
 
         setMovieList(response.results || []);
       } catch (error) {
@@ -47,7 +60,8 @@ function App() {
       }
     };
     fetchMovieData();
-  }, []);
+  }, [debounceSearchTerm]);
+
   useEffect(() => {
     console.log(movieList); // ✅ Logs the updated movieList whenever it changes
   }, [movieList]);

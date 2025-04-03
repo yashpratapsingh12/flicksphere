@@ -24,7 +24,7 @@ const MovieCard: React.FC<{ movie: MovieProp }> = ({ movie }) => {
       <img
         src={
           movie.poster_path
-            ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}/images`
+            ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
             : "/no-movie-img"
         }
         alt={movie.title}
