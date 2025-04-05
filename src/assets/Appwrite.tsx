@@ -1,5 +1,6 @@
 import { Client, Databases, Query } from "appwrite";
 import { ID } from "appwrite";
+import { Models } from "appwrite";
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
@@ -8,30 +9,30 @@ const COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID;
 const client = new Client();
 client.setEndpoint("https://cloud.appwrite.io/v1").setProject(PROJECT_ID);
 
-const database = new Databases(client);
-
-type Movie = {
-  adult: boolean;
-  backdrop_path: string;
-  genre_ids: number[];
+type movie = {
   id: number;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
   poster_path: string;
-  release_date: string;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
 };
 
-export const updateSearchCount = async (searchTerm: string, movie: Movie) => {
+export type MovieSearchDocument = Models.Document & {
+  searchTerm: string;
+  count: number;
+  movie_id: number;
+  poster_url: string;
+};
+
+const database = new Databases(client);
+
+export const updateSearchCount = async (
+  searchTerm: string,
+  movie: movie
+): Promise<void> => {
   try {
-    const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
-      Query.equal("searchTerm", searchTerm),
-    ]);
+    const result = await database.listDocuments<MovieSearchDocument>(
+      DATABASE_ID,
+      COLLECTION_ID,
+      [Query.equal("searchTerm", searchTerm)]
+    );
 
     if (result.documents.length > 0) {
       const doc = result.documents[0];
@@ -39,26 +40,33 @@ export const updateSearchCount = async (searchTerm: string, movie: Movie) => {
         count: doc.count + 1,
       });
     } else {
-      await database.createDocument(DATABASE_ID, COLLECTION_ID, ID.unique(), {
-        searchTerm,
-        count: 1,
-        movie_id: movie.id,
-        poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-      });
+      await database.createDocument<MovieSearchDocument>(
+        DATABASE_ID,
+        COLLECTION_ID,
+        ID.unique(),
+        {
+          searchTerm,
+          count: 1,
+          poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+          movie_id: movie.id,
+        }
+      );
     }
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getTrendingMovies = async () => {
+export const getTrendingMovies = async (): Promise<MovieSearchDocument[]> => {
   try {
-    const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
-      Query.limit(5),
-      Query.orderDesc("count"),
-    ]);
+    const result = await database.listDocuments<MovieSearchDocument>(
+      DATABASE_ID,
+      COLLECTION_ID,
+      [Query.limit(5), Query.orderDesc("count")]
+    );
     return result.documents;
   } catch (error) {
     console.log(error);
+    return [];
   }
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import startIcon from "../assets/star.svg";
+import NoMovie from "../assets/no-movie.png";
 
 type MovieProp = {
   adult: boolean;
@@ -20,12 +21,12 @@ type MovieProp = {
 
 const MovieCard: React.FC<{ movie: MovieProp }> = ({ movie }) => {
   return (
-    <div className="bg-purple-400 p-5 rounded-2xl">
+    <div className="bg-teal-950 p-5 rounded-2xl">
       <img
         src={
           movie.poster_path
             ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
-            : "/no-movie-img"
+            : NoMovie
         }
         alt={movie.title}
         className="rounded-lg h-auto w-full"

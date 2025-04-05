@@ -5,9 +5,10 @@ import { FetchData } from "./utils/FetchData";
 import { useEffect } from "react";
 import Spinner from "./Components/Spinner";
 import MovieCard from "./Components/MovieCard";
-import { useDebounce } from "react-use";
+import { useDebounce, useSetState } from "react-use";
 import { updateSearchCount } from "./assets/Appwrite";
-
+import { getTrendingMovies } from "./assets/Appwrite";
+import { MovieSearchDocument } from "./assets/Appwrite";
 const API_BASE_URL: string = "https://api.themoviedb.org/3";
 
 type Movie = {
@@ -33,6 +34,9 @@ function App() {
   const [movieList, setMovieList] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [debounceSearchTerm, setDebounceSearchTerm] = useState<string>("");
+  const [trendingMovies, setTrendingMovies] = useState<MovieSearchDocument[]>(
+    []
+  );
 
   useDebounce(
     () => {
@@ -53,6 +57,9 @@ function App() {
         const response = await FetchData(endpoint);
 
         setMovieList(response.results || []);
+        if (searchTerm && response.results.length > 0) {
+          await updateSearchCount(searchTerm, response.results[0]);
+        }
       } catch (error) {
         console.error(`Error fetching movies :${error}`);
         setErrorMessage("Error Fetching Movies .Please Try Again");
@@ -64,8 +71,21 @@ function App() {
   }, [debounceSearchTerm]);
 
   useEffect(() => {
-    console.log(movieList); // ✅ Logs the updated movieList whenever it changes
-  }, [movieList]);
+    const trendingMovies = async () => {
+      try {
+        const movie = await getTrendingMovies();
+
+        setTrendingMovies(movie);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    trendingMovies();
+  }, []);
+
+  useEffect(() => {
+    console.log("trending:", trendingMovies);
+  }, [trendingMovies]);
   return (
     <main>
       <div className="">
@@ -80,8 +100,33 @@ function App() {
           </h1>
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
+
+        {trendingMovies.length > 0 && (
+          <section className="mt-20">
+            <h2 className="text-white font-bold text-3xl">Trending Movies</h2>
+
+            <ul className="flex flex-row overflow-y-auto gap-5 -mt-10 w-full hide-scrollbar">
+              {trendingMovies.map((movie, index) => (
+                <li
+                  key={movie.$id}
+                  className="min-w-[230px] flex flex-row items-center"
+                >
+                  <p className="mt-[22px] text-nowrap text-white text-[190px] font-[Bebas Neue] [font-family:'Bebas_Neue',_sans-serif] [-webkit-text-stroke:5px_rgba(206,_206,_251,_0.5)]">
+                    {index + 1}
+                  </p>
+                  <img
+                    src={movie.poster_url}
+                    alt={movie.title}
+                    className="w-[127px] h-[163px] rounded-lg object-cover -ml-3.5"
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         <section className="space-y-9">
-          <h2 className="text-white  font-bold text-3xl mt-[40px]">
+          <h2 className="text-white  font-bold text-3xl mt-[20px]">
             All Movies
           </h2>
 
