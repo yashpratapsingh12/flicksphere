@@ -5,12 +5,13 @@ import { FetchData } from "./utils/FetchData";
 import { useEffect } from "react";
 import Spinner from "./Components/Spinner";
 import MovieCard from "./Components/MovieCard";
-import { useDebounce, useSetState } from "react-use";
+import { useDebounce } from "react-use";
 import { updateSearchCount } from "./assets/Appwrite";
 import { getTrendingMovies } from "./assets/Appwrite";
 import { MovieSearchDocument } from "./assets/Appwrite";
-const API_BASE_URL: string = "https://api.themoviedb.org/3";
+import herobg from "../src/assets/hero-bg.png";
 
+const API_BASE_URL: string = "https://api.themoviedb.org/3";
 type Movie = {
   adult: boolean;
   backdrop_path: string;
@@ -88,8 +89,13 @@ function App() {
   }, [trendingMovies]);
   return (
     <main>
-      <div className="">
-        <header className="mt-10">
+      <div
+        className="w-full h-full bg-center bg-cover absolute"
+        style={{ backgroundImage: `url(${herobg})` }}
+      />
+
+      <div className="px-5 py-12 xs:p-10 max-w-7xl mx-auto flex flex-col relative">
+        <header className="mt-5">
           <img src={hero} className="mx-auto" />
           <h1 className=" mx-auto text-white font-semibold text-5xl text-center">
             Find
@@ -101,47 +107,51 @@ function App() {
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
 
-        {trendingMovies.length > 0 && (
-          <section className="mt-20">
-            <h2 className="text-white font-bold text-3xl">Trending Movies</h2>
+        <div className=" mx-auto">
+          {trendingMovies.length > 0 && (
+            <section className="mt-20">
+              <h2 className="text-white font-bold text-3xl">Trending Movies</h2>
 
-            <ul className="flex flex-row overflow-y-auto gap-5 -mt-10 w-full hide-scrollbar">
-              {trendingMovies.map((movie, index) => (
-                <li
-                  key={movie.$id}
-                  className="min-w-[230px] flex flex-row items-center"
-                >
-                  <p className="mt-[22px] text-nowrap text-white text-[190px] font-[Bebas Neue] [font-family:'Bebas_Neue',_sans-serif] [-webkit-text-stroke:5px_rgba(206,_206,_251,_0.5)]">
-                    {index + 1}
-                  </p>
-                  <img
-                    src={movie.poster_url}
-                    alt={movie.title}
-                    className="w-[127px] h-[163px] rounded-lg object-cover -ml-3.5"
-                  />
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        <section className="space-y-9">
-          <h2 className="text-white  font-bold text-3xl mt-[20px]">
-            All Movies
-          </h2>
-
-          {isLoading ? (
-            <Spinner />
-          ) : errorMessage ? (
-            <p className="text-red-500">{errorMessage}</p>
-          ) : (
-            <ul className="grid grid-col-1 gap-2 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
-              {movieList.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
-              ))}
-            </ul>
+              <ul className="flex flex-row overflow-y-auto gap-5 -mt-10 w-full">
+                {trendingMovies.map((movie, index) => (
+                  <li
+                    key={movie.$id}
+                    className="min-w-[230px] flex flex-row items-center"
+                  >
+                    <p className="mt-[22px] text-nowrap text-white text-[190px] font-[Bebas Neue] [font-family:'Bebas_Neue',sans-serif] ">
+                      {index + 1}
+                    </p>
+                    <img
+                      src={movie.poster_url}
+                      alt={movie.title}
+                      className="w-[127px] h-[163px] rounded-lg object-cover -ml-3.5"
+                    />
+                  </li>
+                ))}
+              </ul>
+            </section>
           )}
-        </section>
+        </div>
+
+        <div>
+          <section className="space-y-9">
+            <h2 className="text-white  font-bold text-3xl mt-[20px]">
+              All Movies
+            </h2>
+
+            {isLoading ? (
+              <Spinner />
+            ) : errorMessage ? (
+              <p className="text-red-500">{errorMessage}</p>
+            ) : (
+              <ul className="grid grid-col-1 gap-2 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
+                {movieList.map((movie) => (
+                  <MovieCard key={movie.id} movie={movie} />
+                ))}
+              </ul>
+            )}
+          </section>
+        </div>
       </div>
     </main>
   );
