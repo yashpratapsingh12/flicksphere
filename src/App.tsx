@@ -53,7 +53,6 @@ function App() {
         const response = await FetchData(endpoint);
 
         setMovieList(response.results || []);
-        updateSearchCount();
       } catch (error) {
         console.error(`Error fetching movies :${error}`);
         setErrorMessage("Error Fetching Movies .Please Try Again");
