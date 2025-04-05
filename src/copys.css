@@ -58,6 +58,7 @@
   }
 
   .trending {
+    
     @apply mt-20;
 
     & ul {
