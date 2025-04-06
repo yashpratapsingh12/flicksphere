@@ -1,25 +1,26 @@
-import { Client, Databases, Query } from "appwrite";
+import { Account, Client, Databases, Query } from "appwrite";
 import { ID } from "appwrite";
 import { Models } from "appwrite";
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID;
-
-const client = new Client();
-client.setEndpoint("https://cloud.appwrite.io/v1").setProject(PROJECT_ID);
-
 type movie = {
   id: number;
   poster_path: string;
 };
-
 export type MovieSearchDocument = Models.Document & {
   searchTerm: string;
   count: number;
   movie_id: number;
   poster_url: string;
 };
+
+const client = new Client();
+client.setEndpoint("https://cloud.appwrite.io/v1").setProject(PROJECT_ID);
+
+export const account = new Account(client);
+export default client;
 
 const database = new Databases(client);
 
