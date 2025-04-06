@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Login from "./Pages/Login";
 import PrivateRoute from "./utils/PrivateRoute";
+import Register from "./Pages/Register";
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="Regiter" element={<Register />} />
 
         <Route element={<PrivateRoute />}>
           <Route path="home" element={<Home />} />
