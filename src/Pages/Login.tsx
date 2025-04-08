@@ -1,23 +1,29 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+
+type data = {
+  email: string;
+  password: string;
+};
 
 const Login = () => {
   const { user, loginUser } = useAuth();
   const navigate = useNavigate();
-  const logininForm = useRef(null);
+
+  const form = useForm<data>();
+  const { register, handleSubmit } = form;
 
   useEffect(() => {
     if (user) {
-      navigate("Display");
+      navigate("/display");
     }
-  }, []);
+  }, [user]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const email = logininForm.current.email.value;
-    const password = logininForm.current.password.value;
-
+  const onSubmit = (data: data) => {
+    const email = data.email;
+    const password = data.password;
     const userInfo = {
       email,
       password,
@@ -26,16 +32,15 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="bg-blue-300">
       <div>
-        <form ref={logininForm} onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <label>Email:</label>
             <input
               required
               type="email"
-              name="email"
-              placeholder="Enter email..."
+              {...register("email", { required: true })}
             />
           </div>
 
@@ -43,14 +48,12 @@ const Login = () => {
             <label>Password:</label>
             <input
               type="password"
-              name="password"
-              placeholder="Enter password..."
+              {...register("password", { required: true })}
             />
           </div>
+          <button>Submit</button>
 
-          <div>
-            <input type="submit" value="Login" className="btn" />
-          </div>
+          <div></div>
         </form>
 
         <p>

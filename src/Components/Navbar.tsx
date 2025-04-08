@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 const Navbar = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logoutUser } = useAuth();
 
   const logoutClick = () => {
     navigate("/");
@@ -12,18 +12,20 @@ const Navbar = () => {
     <div className=" flex flex-row  justify-end gap-5 max-w-6xl mx-auto  bg-teal-950 p-3 text-white font-bold rounded-lg">
       {user ? (
         <>
-          <NavLink to="Home" className="text-white">
-            Home
-          </NavLink>
-          <NavLink to="Display" className="text-white">
+          <NavLink to="/display" className="text-white">
             Movies
           </NavLink>
-          <button onClick={logoutClick} className="btn">
+          <button onClick={logoutUser} className="btn">
             Logout
           </button>
         </>
       ) : (
-        <NavLink to="login">LogIn</NavLink>
+        <>
+          <NavLink to="/" className="text-white">
+            Home
+          </NavLink>
+          <NavLink to="/login">LogIn</NavLink>
+        </>
       )}
     </div>
   );
