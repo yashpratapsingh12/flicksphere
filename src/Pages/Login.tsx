@@ -10,6 +10,7 @@ type data = {
 
 const Login = () => {
   const { user, loginUser } = useAuth();
+
   const navigate = useNavigate();
 
   const form = useForm<data>();
