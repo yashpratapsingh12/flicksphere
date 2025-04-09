@@ -3,6 +3,7 @@ import { useAuth } from "../utils/AuthContext";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import videobg from "../assets/videoplayback.mp4";
 
 type data = {
   name: string;
@@ -46,53 +47,74 @@ const Register = () => {
   };
 
   return (
-    <div className="bg-blue-200">
-      <div>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <label>Name:</label>
-            <input
-              type="text"
-              placeholder="Enter name..."
-              {...register("name", { required: true })}
-            />
-          </div>
+    <div className="relative w-full h-screen overflow-hidden">
+      <video
+        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+        autoPlay
+        loop
+        muted
+        playsInline
+      >
+        <source src={videobg} type="video/mp4" />
+      </video>
+      <div className="relative flex flex-col items-center justify-center h-screen p-6 backdrop-blur-md">
+        <h1 className="text-6xl  font-under font-bold text-white">Register</h1>
+        <div className="backdrop-blur-md p-8 rounded-xl shadow-lg mb-30 text-white ">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div>
+              <label>Name:</label>
+              <input
+                type="text"
+                className="w-full px-4 py-2 rounded bg-white  text-black"
+                placeholder="Enter name..."
+                {...register("name", { required: true })}
+              />
+            </div>
 
-          <div className="form-field-wrapper">
-            <label>Email:</label>
-            <input
-              type="email"
-              placeholder="Enter email..."
-              {...register("email", { required: true })}
-            />
-          </div>
+            <div>
+              <label>Email:</label>
+              <input
+                type="email"
+                className="w-full px-4 py-2 rounded bg-white  text-black"
+                placeholder="Enter email..."
+                {...register("email", { required: true })}
+              />
+            </div>
 
-          <div className="form-field-wrapper">
-            <label>Password:</label>
-            <input
-              type="password"
-              placeholder="Enter password..."
-              {...register("password1", { required: true })}
-            />
-          </div>
+            <div>
+              <label>Password:</label>
+              <input
+                type="password"
+                className="w-full px-4 py-2 rounded bg-white  text-black"
+                placeholder="Enter password..."
+                {...register("password1", { required: true })}
+              />
+            </div>
 
-          <div className="form-field-wrapper">
-            <label>Confirm Password:</label>
-            <input
-              type="password"
-              placeholder="Confirm password..."
-              {...register("password2", { required: true })}
-            />
-          </div>
+            <div className="form-field-wrapper">
+              <label>Confirm Password:</label>
+              <input
+                type="password"
+                className="w-full px-4 py-2 rounded bg-white  text-black"
+                placeholder="Confirm password..."
+                {...register("password2", { required: true })}
+              />
+            </div>
 
-          <div className="form-field-wrapper">
-            <button>Submit</button>
-          </div>
-        </form>
+            <div>
+              <button className="w-full bg-blue-500 hover:bg-blue-600 py-2 mt-2 rounded text-white">
+                Submit
+              </button>
+            </div>
+          </form>
 
-        <p>
-          Already have an account? <Link to="/">Login</Link>
-        </p>
+          <p className="mt-4 text-center">
+            Already have an account?{" "}
+            <Link className="text-blue-300 underline" to="/">
+              Login
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
