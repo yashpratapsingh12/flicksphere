@@ -21,10 +21,7 @@ const Navbar = () => {
         </>
       ) : (
         <>
-          <NavLink to="/" className="text-white">
-            Home
-          </NavLink>
-          <NavLink to="/login">LogIn</NavLink>
+          <NavLink to="/">LogIn</NavLink>
         </>
       )}
     </div>

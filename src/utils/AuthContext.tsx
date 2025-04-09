@@ -26,6 +26,7 @@ type AuthContextType = {
   logoutUser: () => Promise<void>;
   checkUserStatus: () => Promise<void>;
   registerUser: (info: registerInfo) => Promise<void>;
+  loading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,6 +35,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [loading, setLoading] = useState(false);
+
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(
     null
   );
@@ -51,7 +53,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       console.log("accountDeatils", response);
 
       setUser(accountDetails);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
+
+    setLoading(false);
   };
   const logoutUser = async () => {
     try {
@@ -62,10 +68,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
   const checkUserStatus = async () => {
+    setLoading(true);
     try {
       let accountDeatil = await account.get();
       setUser(accountDeatil);
     } catch (error) {
+      // setUser(null);
       console.log(error);
     }
     setLoading(false);
@@ -76,10 +84,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       await account.create(ID.unique(), email, password1, name);
 
-      let response = await account.createEmailPasswordSession(email, password1);
+      await account.createEmailPasswordSession(email, password1);
       let accountDetails = await account.get();
-
-      console.log("accountDeatils", response);
 
       setUser(accountDetails);
     } catch (error) {
@@ -94,11 +100,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     logoutUser,
     checkUserStatus,
     registerUser,
+    loading,
   };
   return (
-    <AuthContext.Provider value={ContextData}>
-      {loading ? <p>...Loading</p> : children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={ContextData}>{children}</AuthContext.Provider>
   );
 };
 

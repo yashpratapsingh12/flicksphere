@@ -10,6 +10,7 @@ import { updateSearchCount } from "../assets/Appwrite";
 import { getTrendingMovies } from "../assets/Appwrite";
 import { MovieSearchDocument } from "../assets/Appwrite";
 import herobg from "../assets/hero-bg.png";
+import Navbar from "../Components/Navbar";
 
 const API_BASE_URL: string = "https://api.themoviedb.org/3";
 type Movie = {
@@ -90,9 +91,10 @@ function Display() {
   return (
     <main>
       <div
-        className="w-full h-full bg-center bg-cover absolute"
+        className="w-full h-full bg-center bg-cover absolute z-0"
         style={{ backgroundImage: `url(${herobg})` }}
       />
+      <Navbar />
 
       <div className="px-5 py-12 xs:p-10 max-w-7xl mx-auto flex flex-col relative">
         <header className="mt-5">

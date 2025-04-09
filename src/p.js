@@ -1,65 +1,57 @@
+import background from "../assets/videoplayback.mp4";
 
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../utils/AuthContext";
-import { useEffect, useRef } from "react";
-
-const Login = () => {
-  const { user, loginUser } = useAuth();
-  const navigate = useNavigate();
-  const logininForm = useRef(null);
-
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const email = logininForm.current.email.value;
-    const password = logininForm.current.password.value;
-
-    const userInfo = {
-      email,
-      password,
-    };
-    loginUser(userInfo);
-  };
-
+const Home = () => {
   return (
-    <div className="bg-blue-300">
-      <div>
-        <form ref={logininForm} onSubmit={handleSubmit}>
-          <div>
-            <label>Email:</label>
-            <input
-              required
-              type="email"
-              name="email"
-              placeholder="Enter email..."
-            />
-          </div>
+<div className="relative w-full h-screen overflow-hidden">
+      <video
+        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+        autoPlay
+        loop
+        muted
+        playsInline
+      >
+        <source src={videobg} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
 
-          <div>
-            <label>Password:</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter password..."
-            />
-          </div>
-
-          <div>
-            <input type="submit" value="Login" className="btn" />
-          </div>
-        </form>
-
-        <p>
-          Don't have an account? <Link to="/register">Register</Link>
-        </p>
+      <div className="relative z-10 text-white p-10">
+       <div className="bg-white bg-opacity-10 backdrop-blur-md p-8 rounded-xl shadow-lg text-white w-[90%] max-w-md">
+                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                   <div>
+                     <label>Email:</label>
+                     <input
+                       className="w-full px-4 py-2 rounded bg-white bg-opacity-20 text-white"
+                       required
+                       type="email"
+                       {...register("email", { required: true })}
+                     />
+                   </div>
+       
+                   <div>
+                     <label>Password:</label>
+                     <input
+                       className="w-full px-4 py-2 rounded bg-white bg-opacity-20 text-white"
+                       type="password"
+                       {...register("password", { required: true })}
+                     />
+                   </div>
+       
+                   <button className="w-full bg-blue-500 hover:bg-blue-600 py-2 rounded">
+                     Submit
+                   </button>
+                 </form>
+       
+                 <p className="mt-4 text-center">
+                   Don't have an account?{" "}
+                   <Link className="text-blue-300 underline" to="/register">
+                     Register
+                   </Link>
+                 </p>
+               </div>
+             </div>
       </div>
-    </div>
+  
   );
 };
 
-export default Login;
+export default Home;
