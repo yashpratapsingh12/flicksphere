@@ -44,7 +44,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     checkUserStatus();
   }, []);
 
-  const loginUser = async ({ email, password }: loginInfo) => {
+  const loginUser = async (
+    { email, password }: loginInfo,
+    setError?: (
+      name: "password",
+      error: { type: string; message: string }
+    ) => void
+  ) => {
     setLoading(true);
     try {
       let response = await account.createEmailPasswordSession(email, password);
@@ -53,8 +59,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       console.log("accountDeatils", response);
 
       setUser(accountDetails);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      console.log("Login error:", error);
+
+      if (setError) {
+        setError("password", {
+          type: "manual",
+          message: "Incorrect email or password.",
+        });
+      }
     }
 
     setLoading(false);

@@ -3,7 +3,6 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./Pages/Login";
 import PrivateRoute from "./utils/PrivateRoute";
 import Register from "./Pages/Register";
-import Navbar from "./Components/Navbar";
 import { useAuth } from "./utils/AuthContext";
 import Spinner from "./Components/Spinner";
 
@@ -17,7 +16,7 @@ const App = () => {
         </div>
       ) : (
         <>
-          <Navbar />
+          {/* <Navbar /> */}
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />

@@ -10,7 +10,8 @@ import { updateSearchCount } from "../assets/Appwrite";
 import { getTrendingMovies } from "../assets/Appwrite";
 import { MovieSearchDocument } from "../assets/Appwrite";
 import herobg from "../assets/hero-bg.png";
-import Navbar from "../Components/Navbar";
+import { useAuth } from "../utils/AuthContext";
+import { useRef } from "react";
 
 const API_BASE_URL: string = "https://api.themoviedb.org/3";
 type Movie = {
@@ -39,6 +40,9 @@ function Display() {
   const [trendingMovies, setTrendingMovies] = useState<MovieSearchDocument[]>(
     []
   );
+  const allMovieRef = useRef<HTMLDivElement>(null);
+
+  const { logoutUser } = useAuth();
 
   useDebounce(
     () => {
@@ -61,6 +65,9 @@ function Display() {
         setMovieList(response.results || []);
         if (searchTerm && response.results.length > 0) {
           await updateSearchCount(searchTerm, response.results[0]);
+        }
+        if (searchTerm.trim() && allMovieRef.current) {
+          allMovieRef.current.scrollIntoView({ behavior: "smooth" });
         }
       } catch (error) {
         console.error(`Error fetching movies :${error}`);
@@ -94,9 +101,16 @@ function Display() {
         className="w-full h-full bg-center bg-cover absolute z-0"
         style={{ backgroundImage: `url(${herobg})` }}
       />
-      <Navbar />
+      <div className="relative text-end mr-2 ">
+        <button
+          onClick={logoutUser}
+          className="text-white font-under mt-5 mr-5"
+        >
+          Logout
+        </button>
+      </div>
 
-      <div className="px-5 py-12 xs:p-10 max-w-7xl mx-auto flex flex-col relative">
+      <div className="px-5 py-12 xs:p-10 max-w-7xl mx-auto flex flex-col relative lg:-mt-30">
         <header className="mt-5">
           <img src={hero} className="mx-auto" />
           <h1 className=" mx-auto text-white font-semibold text-5xl text-center">
@@ -109,18 +123,19 @@ function Display() {
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
 
-        <div className=" mx-auto">
+        <div className=" mx-auto w-full overflow-x-scroll ">
           {trendingMovies.length > 0 && (
-            <section className="mt-20">
-              <h2 className="text-white font-bold text-3xl">Trending Movies</h2>
-
-              <ul className="flex flex-row overflow-y-auto gap-5 -mt-10 w-full">
+            <section className="mt-20 ">
+              <h2 className="text-white font-bold  text-3xl overflow-hidden">
+                Trending Movies
+              </h2>
+              <ul className="flex flex-row  gap-5 -mt-10 w-full max-w-full">
                 {trendingMovies.map((movie, index) => (
                   <li
                     key={movie.$id}
                     className="min-w-[230px] flex flex-row items-center"
                   >
-                    <p className="mt-[22px] text-nowrap text-white text-[190px] font-[Bebas Neue] [font-family:'Bebas_Neue',sans-serif] ">
+                    <p className="mt-[22px] text-nowrap text-white text-[190px] ">
                       {index + 1}
                     </p>
                     <img
@@ -135,14 +150,16 @@ function Display() {
           )}
         </div>
 
-        <div>
+        <div ref={allMovieRef}>
           <section className="space-y-9">
             <h2 className="text-white  font-bold text-3xl mt-[20px]">
               All Movies
             </h2>
 
             {isLoading ? (
-              <Spinner />
+              <div className="flex items-center justify-center">
+                <Spinner />
+              </div>
             ) : errorMessage ? (
               <p className="text-red-500">{errorMessage}</p>
             ) : (

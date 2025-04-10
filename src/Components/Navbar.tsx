@@ -1,15 +1,11 @@
 import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+
 import { useAuth } from "../utils/AuthContext";
 const Navbar = () => {
-  const navigate = useNavigate();
   const { user, logoutUser } = useAuth();
 
-  const logoutClick = () => {
-    navigate("/");
-  };
   return (
-    <div className=" flex flex-row  justify-end gap-5 max-w-6xl mx-auto  bg-teal-950 p-3 text-white font-bold rounded-lg">
+    <div className=" flex flex-row  justify-end gap-5 max-w-6xl mx-auto  bg-blue-100 p-3 text-white font-bold rounded-lg">
       {user ? (
         <>
           <NavLink to="/display" className="text-white">

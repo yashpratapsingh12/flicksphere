@@ -21,7 +21,7 @@ type MovieProp = {
 
 const MovieCard: React.FC<{ movie: MovieProp }> = ({ movie }) => {
   return (
-    <div className="bg-teal-950 p-5 rounded-2xl">
+    <div className="bg-teal-950 p-5 rounded-2xl max-w-2xl  ">
       <img
         src={
           movie.poster_path
