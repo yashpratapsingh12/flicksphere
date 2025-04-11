@@ -58,8 +58,10 @@ const Register = () => {
         <source src={videobg} type="video/mp4" />
       </video>
       <div className="relative flex flex-col items-center justify-center h-screen p-6 backdrop-blur-md">
-        <h1 className="text-6xl  font-under font-bold text-white">Register</h1>
-        <div className="backdrop-blur-md p-8 rounded-xl shadow-lg mb-30 text-white ">
+        <h1 className="text-6xl  font-under font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] mt-40">
+          Register
+        </h1>
+        <div className="backdrop-blur-md p-8 rounded-xl shadow-lg mb-30 text-white mt-10 ">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label>Name:</label>

@@ -15,7 +15,12 @@ const Login = () => {
   const navigate = useNavigate();
 
   const form = useForm<data>();
-  const { register, handleSubmit } = form;
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = form;
 
   useEffect(() => {
     if (user) {
@@ -30,8 +35,9 @@ const Login = () => {
       email,
       password,
     };
-    loginUser(userInfo);
+    loginUser(userInfo, setError);
   };
+  console.log("in Loginnnn", errors);
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
@@ -46,12 +52,12 @@ const Login = () => {
         <source src={videobg} type="video/mp4" />
       </video>
 
-      <div className=" flex flex-col items-center justify-center h-screen  backdrop-blur-md p-6 rounded-lg">
-        <h1 className="text-6xl   mb-10 font-under font-bold text-white ">
+      <div className=" relative z-10 flex flex-col items-center justify-center h-screen  backdrop-blur-md p-6 rounded-lg">
+        <h1 className="text-6xl   mb-10 font-under font-bold text-white  drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ">
           FlickSphere
         </h1>
 
-        <div className=" bg-opacity-50 backdrop-blur-md p-8 rounded-xl shadow-lg text-white">
+        <div className=" backdrop-blur-md p-8 rounded-xl shadow-xl text-white ">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label>Email:</label>
@@ -62,6 +68,11 @@ const Login = () => {
                 type="email"
                 {...register("email", { required: true })}
               />
+              {errors.email && (
+                <p className="text-red-400 text-sm mt-1">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             <div>
@@ -72,6 +83,11 @@ const Login = () => {
                 placeholder="password"
                 {...register("password", { required: true })}
               />
+              {errors.password && (
+                <p className="text-red-400 text-sm mt-1">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
             <button className="w-full bg-blue-500 hover:bg-blue-600 py-2 rounded">

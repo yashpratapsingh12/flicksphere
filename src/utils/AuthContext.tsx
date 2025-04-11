@@ -8,6 +8,7 @@ import {
 import { Models } from "appwrite";
 import { account } from "../assets/Appwrite";
 import { ID } from "appwrite";
+import { UseFormSetError } from "react-hook-form";
 
 type loginInfo = {
   email: string;
@@ -22,7 +23,10 @@ type registerInfo = {
 
 type AuthContextType = {
   user: Models.User<Models.Preferences> | null;
-  loginUser: (info: loginInfo) => Promise<void>;
+  loginUser: (
+    info: loginInfo,
+    setError: UseFormSetError<loginInfo>
+  ) => Promise<void>;
   logoutUser: () => Promise<void>;
   checkUserStatus: () => Promise<void>;
   registerUser: (info: registerInfo) => Promise<void>;
@@ -46,10 +50,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const loginUser = async (
     { email, password }: loginInfo,
-    setError?: (
-      name: "password",
-      error: { type: string; message: string }
-    ) => void
+    setError: UseFormSetError<loginInfo>
   ) => {
     setLoading(true);
     try {
@@ -60,13 +61,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       setUser(accountDetails);
     } catch (error: any) {
-      console.log("Login error:", error);
+      const errorMessage = error?.message?.toLowerCase() || "";
 
-      if (setError) {
-        setError("password", {
-          type: "manual",
-          message: "Incorrect email or password.",
-        });
+      if (errorMessage) {
+        if (
+          errorMessage.includes("user with email") ||
+          errorMessage.includes("invalid email")
+        ) {
+          setError("email", {
+            type: "manual",
+            message: "No user found with this email.",
+          });
+        } else if (
+          errorMessage.includes("invalid") ||
+          errorMessage.includes("password")
+        ) {
+          setError("password", {
+            type: "manual",
+            message: "Incorrect password.",
+          });
+        } else {
+          setError("password", {
+            type: "manual",
+            message: "Login failed. Please check your credentials.",
+          });
+        }
       }
     }
 
