@@ -37,7 +37,7 @@ const Search: React.FC<searchProps> = ({ searchTerm, setSearchTerm }) => {
         <input
           ref={inputRef}
           placeholder="Search For Movie"
-          value={searchTerm}
+          value={isMobile ? manualSearchTerm : searchTerm}
           onChange={(e) =>
             isMobile ? setManual(e.target.value) : setSearchTerm(e.target.value)
           }
