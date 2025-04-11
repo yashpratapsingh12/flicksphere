@@ -40,7 +40,9 @@ function Display() {
   const [trendingMovies, setTrendingMovies] = useState<MovieSearchDocument[]>(
     []
   );
+
   const allMovieRef = useRef<HTMLDivElement>(null);
+  const [searchTriggered, setSearchTriggered] = useState<boolean>(false);
 
   const { logoutUser } = useAuth();
 
@@ -66,9 +68,6 @@ function Display() {
         if (searchTerm && response.results.length > 0) {
           await updateSearchCount(searchTerm, response.results[0]);
         }
-        if (searchTerm.trim() && allMovieRef.current) {
-          allMovieRef.current.scrollIntoView({ behavior: "smooth" });
-        }
       } catch (error) {
         console.error(`Error fetching movies :${error}`);
         setErrorMessage("Error Fetching Movies .Please Try Again");
@@ -93,8 +92,17 @@ function Display() {
   }, []);
 
   useEffect(() => {
-    console.log("trending:", trendingMovies);
-  }, [trendingMovies]);
+    if (searchTriggered && allMovieRef.current) {
+      allMovieRef.current.scrollIntoView({ behavior: "smooth" });
+      setSearchTriggered(false);
+    }
+  }, [searchTriggered]);
+
+  const handleSearchSubmit = () => {
+    if (searchTerm.trim()) {
+      setSearchTriggered(true);
+    }
+  };
   return (
     <main>
       <div
@@ -120,7 +128,11 @@ function Display() {
             </span>
             You'll Enjoy Without the hassle
           </h1>
-          <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          <Search
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            onSearchSubmit={handleSearchSubmit}
+          />
           Search
         </header>
 

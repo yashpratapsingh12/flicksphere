@@ -4,9 +4,14 @@ import { useEffect, useRef, useState } from "react";
 type searchProps = {
   searchTerm: string;
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  onSearchSubmit: () => void;
 };
 
-const Search: React.FC<searchProps> = ({ searchTerm, setSearchTerm }) => {
+const Search: React.FC<searchProps> = ({
+  searchTerm,
+  setSearchTerm,
+  onSearchSubmit,
+}) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [manualSearchTerm, setManual] = useState<string>(searchTerm);
@@ -24,8 +29,16 @@ const Search: React.FC<searchProps> = ({ searchTerm, setSearchTerm }) => {
 
   const handleSearch = () => {
     setSearchTerm(manualSearchTerm);
+    if (searchTerm.trim()) {
+      onSearchSubmit();
+    }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchTerm.trim()) {
+      onSearchSubmit();
+    }
+  };
   const handleFocus = () => {
     inputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
@@ -36,6 +49,7 @@ const Search: React.FC<searchProps> = ({ searchTerm, setSearchTerm }) => {
         <img src={searchIcon} alt="search" />
         <input
           ref={inputRef}
+          onKeyDown={handleKeyDown}
           placeholder="Search For Movie"
           value={isMobile ? manualSearchTerm : searchTerm}
           onChange={(e) =>
