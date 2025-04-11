@@ -28,6 +28,7 @@ const MovieCard: React.FC<{ movie: MovieProp }> = ({ movie }) => {
             ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
             : NoMovie
         }
+        loading="lazy"
         alt={movie.title}
         className="rounded-lg h-auto w-full"
       />

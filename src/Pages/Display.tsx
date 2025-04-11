@@ -121,6 +121,7 @@ function Display() {
             You'll Enjoy Without the hassle
           </h1>
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          Search
         </header>
 
         <div className=" mx-auto w-full overflow-x-scroll ">
