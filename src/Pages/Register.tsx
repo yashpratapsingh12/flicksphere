@@ -3,7 +3,7 @@ import { useAuth } from "../utils/AuthContext";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import videobg from "../assets/videoplayback.mp4";
+import videobg from "../assets/videoplayback (1) (1).mp4";
 
 type data = {
   name: string;
