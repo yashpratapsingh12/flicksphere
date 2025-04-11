@@ -41,6 +41,7 @@ const Login = () => {
         loop
         muted
         playsInline
+        preload="auto"
       >
         <source src={videobg} type="video/mp4" />
       </video>
@@ -57,6 +58,7 @@ const Login = () => {
               <input
                 className="w-full px-4 py-2 rounded bg-white  text-black"
                 required
+                placeholder="Email"
                 type="email"
                 {...register("email", { required: true })}
               />
@@ -67,6 +69,7 @@ const Login = () => {
               <input
                 className="w-full px-4 py-2 rounded bg-white  text-black"
                 type="password"
+                placeholder="password"
                 {...register("password", { required: true })}
               />
             </div>
