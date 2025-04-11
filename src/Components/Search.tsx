@@ -42,6 +42,11 @@ const Search: React.FC<searchProps> = ({
   const handleFocus = () => {
     inputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
+  useEffect(() => {
+    if (!manualSearchTerm.trim()) {
+      setSearchTerm(manualSearchTerm);
+    }
+  }, [manualSearchTerm]);
 
   return (
     <div className="w-full mx-auto">
