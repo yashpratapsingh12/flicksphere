@@ -57,7 +57,8 @@ const Register = () => {
       >
         <source src={videobg} type="video/mp4" />
       </video>
-      <div className="relative flex flex-col items-center justify-center h-screen p-6 backdrop-blur-md">
+      <div className="absolute top-0 left-0 w-full h-full bg-black opacity-70 z-10" />
+      <div className="z-20 relative flex flex-col items-center justify-center h-screen p-6 backdrop-blur-md">
         <h1 className="text-6xl  font-under font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] mt-40">
           Register
         </h1>

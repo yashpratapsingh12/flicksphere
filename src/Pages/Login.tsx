@@ -45,6 +45,7 @@ const Login = () => {
       >
         <source src={videobg} type="video/mp4" />
       </video>
+      <div className="absolute top-0 left-0 w-full h-full bg-black opacity-70 z-10" />
 
       <div className=" relative z-10 flex flex-col items-center justify-center h-screen  backdrop-blur-md p-6 rounded-lg">
         <h1 className="text-6xl   mb-10 font-under font-bold text-white  drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ">

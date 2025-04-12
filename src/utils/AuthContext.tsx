@@ -4,12 +4,10 @@ import React, {
   useEffect,
   createContext,
   ReactNode,
-  SetStateAction,
 } from "react";
 import { Models } from "appwrite";
 import { account } from "../assets/Appwrite";
 import { ID } from "appwrite";
-import { UseFormSetError } from "react-hook-form";
 
 type loginInfo = {
   email: string;

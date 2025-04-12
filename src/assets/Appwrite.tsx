@@ -63,7 +63,7 @@ export const getTrendingMovies = async (): Promise<MovieSearchDocument[]> => {
     const result = await database.listDocuments<MovieSearchDocument>(
       DATABASE_ID,
       COLLECTION_ID,
-      [Query.limit(10), Query.orderDesc("count")]
+      [Query.limit(9), Query.orderDesc("count")]
     );
     return result.documents;
   } catch (error) {
