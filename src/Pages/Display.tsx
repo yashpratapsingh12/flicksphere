@@ -5,13 +5,14 @@ import { FetchData } from "../utils/FetchData";
 import { useEffect } from "react";
 import Spinner from "../Components/Spinner";
 import MovieCard from "../Components/MovieCard";
-import { useDebounce } from "react-use";
+
 import { updateSearchCount } from "../assets/Appwrite";
 import { getTrendingMovies } from "../assets/Appwrite";
 import { MovieSearchDocument } from "../assets/Appwrite";
 import herobg from "../assets/hero-bg.png";
 import { useAuth } from "../utils/AuthContext";
 import { useRef } from "react";
+import { useDebounce } from "../utils/hook/useDebounce";
 
 const API_BASE_URL: string = "https://api.themoviedb.org/3";
 type Movie = {
@@ -36,7 +37,7 @@ function Display() {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [movieList, setMovieList] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [debounceSearchTerm, setDebounceSearchTerm] = useState<string>("");
+
   const [trendingMovies, setTrendingMovies] = useState<MovieSearchDocument[]>(
     []
   );
@@ -46,13 +47,7 @@ function Display() {
 
   const { logoutUser } = useAuth();
 
-  useDebounce(
-    () => {
-      setDebounceSearchTerm(searchTerm);
-    },
-    500,
-    [searchTerm]
-  );
+  const debounceSearchTerm = useDebounce(searchTerm, 500);
 
   useEffect(() => {
     const fetchMovieData = async () => {

@@ -15,12 +15,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const form = useForm<data>();
-  const {
-    register,
-    handleSubmit,
-    setError,
-    formState: { errors },
-  } = form;
+  const { register, handleSubmit } = form;
 
   useEffect(() => {
     if (user) {
@@ -28,16 +23,15 @@ const Login = () => {
     }
   }, [user]);
 
-  const onSubmit = (data: data) => {
+  const onSubmit = async (data: data) => {
     const email = data.email;
     const password = data.password;
     const userInfo = {
       email,
       password,
     };
-    loginUser(userInfo, setError);
+    await loginUser(userInfo);
   };
-  console.log("in Loginnnn", errors);
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
@@ -68,11 +62,6 @@ const Login = () => {
                 type="email"
                 {...register("email", { required: true })}
               />
-              {errors.email && (
-                <p className="text-red-400 text-sm mt-1">
-                  {errors.email.message}
-                </p>
-              )}
             </div>
 
             <div>
@@ -81,13 +70,10 @@ const Login = () => {
                 className="w-full px-4 py-2 rounded bg-white  text-black"
                 type="password"
                 placeholder="password"
-                {...register("password", { required: true })}
+                {...register("password", {
+                  required: true,
+                })}
               />
-              {errors.password && (
-                <p className="text-red-400 text-sm mt-1">
-                  {errors.password.message}
-                </p>
-              )}
             </div>
 
             <button className="w-full bg-blue-500 hover:bg-blue-600 py-2 rounded">

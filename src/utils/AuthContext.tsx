@@ -1,9 +1,10 @@
-import {
+import React, {
   useContext,
   useState,
   useEffect,
   createContext,
   ReactNode,
+  SetStateAction,
 } from "react";
 import { Models } from "appwrite";
 import { account } from "../assets/Appwrite";
@@ -23,10 +24,7 @@ type registerInfo = {
 
 type AuthContextType = {
   user: Models.User<Models.Preferences> | null;
-  loginUser: (
-    info: loginInfo,
-    setError: UseFormSetError<loginInfo>
-  ) => Promise<void>;
+  loginUser: (info: loginInfo) => Promise<void>;
   logoutUser: () => Promise<void>;
   checkUserStatus: () => Promise<void>;
   registerUser: (info: registerInfo) => Promise<void>;
@@ -48,10 +46,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     checkUserStatus();
   }, []);
 
-  const loginUser = async (
-    { email, password }: loginInfo,
-    setError: UseFormSetError<loginInfo>
-  ) => {
+  const loginUser = async ({ email, password }: loginInfo) => {
     setLoading(true);
     try {
       let response = await account.createEmailPasswordSession(email, password);
@@ -60,33 +55,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       console.log("accountDeatils", response);
 
       setUser(accountDetails);
-    } catch (error: any) {
-      const errorMessage = error?.message?.toLowerCase() || "";
-
-      if (errorMessage) {
-        if (
-          errorMessage.includes("user with email") ||
-          errorMessage.includes("invalid email")
-        ) {
-          setError("email", {
-            type: "manual",
-            message: "No user found with this email.",
-          });
-        } else if (
-          errorMessage.includes("invalid") ||
-          errorMessage.includes("password")
-        ) {
-          setError("password", {
-            type: "manual",
-            message: "Incorrect password.",
-          });
-        } else {
-          setError("password", {
-            type: "manual",
-            message: "Login failed. Please check your credentials.",
-          });
-        }
-      }
+    } catch (err: any) {
+      console.log("Login Error", err);
     }
 
     setLoading(false);
