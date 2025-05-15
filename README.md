@@ -20,7 +20,7 @@
 - Tailwind
 - Appwrite
 
-  ##Authentication
+  ## Authentication
   <h1 align="center">
        <img height=500 src="Proto/Screenshot 2025-04-12 193159.png" alt="Authentication"/>
 </h1>
